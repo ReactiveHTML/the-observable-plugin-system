@@ -1,0 +1,28 @@
+table {
+	width: 100%;
+	table-layout: fixed;
+	max-width: 100%;
+}
+
+th {
+	text-align: start;
+}
+
+th, td {
+	padding: .4rem;
+}
+
+td {
+	font-family: monospace;
+	vertical-align: top;
+	overflow-x: auto;
+}
+
+ol {
+	max-width: 100%;
+	padding: 0 0 0 1.4rem;
+}
+li {
+	margin: 0 0 .4rem;
+	white-space: pre;
+}
