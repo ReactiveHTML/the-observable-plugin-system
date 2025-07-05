@@ -1,9 +1,8 @@
-// import { Subject } from 'rxjs';
-import { DuplexStream } from './duplex';
 import type { PluginManifest, Messagebus, Channel, PluginConfig, Topic, MessagebusChannelRecord } from './types';
-
-export { DuplexStream } from './duplex';
 export type { PluginManifest, Messagebus, Channel, PluginConfig, Topic, MessagebusChannelRecord } from './types';
+
+import { DuplexStream } from './duplex';
+export { DuplexStream } from './duplex';
 
 export type { PluginName } from './types';
 export type { PluginBody } from './types';
@@ -53,6 +52,7 @@ export default function TOPS<Protocol extends MessagebusChannelRecord>(modules: 
 	messagebus['INIT']
 		.invoke(initial)
 		//.subscribe(x=>console.log('data returned:', x));
+	;
 
 	return messagebus;
 }

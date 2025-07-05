@@ -6,18 +6,16 @@ export class DuplexStream<T, R=T> extends Subject<T> {
 	constructor(source?: Subject<R>) {
 		super();
 		this.origin = source ?? new Subject<R>();
-		// this.origin.name='internalSubject'
 	}
 
 	/**
-	 * Sets up the reply mechanism.
+	 * Reply to an invoke call.
 	 * @param handler Function to handle incoming data and send responses.
 	 * @returns Subscription to manage the reply handler.
 	 */
 	reply(handler: (data: T) => R | Observable<R>): Subscription {
 		const stream = handler ? this.pipe(map(handler)) : this
 		const subscription = stream.subscribe(this.origin);
-		//return this;
 		return subscription;
 	}
 
@@ -38,40 +36,27 @@ export class DuplexStream<T, R=T> extends Subject<T> {
 		this.id=Math.random();
 
 		const retval = (this.observers as DuplexStream<any, any>[]).reduce((a, b, i) => {
-			// console.log('REDX', b, i);
 			const s = new DuplexStream();
 
 			const nxt = s.pipe(
-				// switchMap(x => new Duplex(of(b)).invoke(x)),
 				switchMap(x => {
 					return s.origin;
 				}),
-				// tap(x=>console.log('>>>>>XXXX', x)),
 			);
-
-			//nxt.origin = s.origin;
-			//nxt.subscribe(x=>console.log('NXT', i, x));
-			//nxt.subscribe();
 
 			const oldNext = b.destination._next;
 			b.destination._next = data => {
-				// console.log('._next', i, data);
 				oldNext(data);
 			}
-			// setTimeout(()=>b.next(x), 100);
 			s.origin.subscribe(x=>console.log('s.ORIGIN', i, x));
 
 			s.next(initial);
 			return nxt;
-		//});
 		}, new DuplexStream(of(initial)));
 
 		retval.subscribe(x=>console.log('RETV', x));
-		//this.origin.subscribe(x=>console.log('ORG', x));
-		//this.observers[0].next(initial);
 
 		return retval;
-		// return this;
 	}
 
 	/**
