@@ -75,8 +75,8 @@ This makes it possible for a Duplex stream to return a value to the original emi
 simply taking values coming from the pipeline and re-emitting them into the caller stream.
 ```js
 const stream = new Duplex().pipe(
-  ...operators,
-  map(data => asReturnValue(data)),
+	...operators,
+	map(data => asReturnValue(data)),
 ).reply();
 ```
 
@@ -88,7 +88,7 @@ Similar to RxJS `switchMap`. It emits the current value from the source stream a
 
 ```js
 source.pipe(
-  switchInvoke(OTHER_TOPIC),
+	switchInvoke(OTHER_TOPIC),
 	map(rv => { // returned values
 	})
 );
@@ -99,7 +99,7 @@ Similar to RxJS `mergeMap`. It emits the current value from the source stream in
 
 ```js
 source.pipe(
-  mergeInvoke(OTHER_TOPIC),
+	mergeInvoke(OTHER_TOPIC),
 	map(rv => { // returned values
 	})
 );
@@ -111,7 +111,7 @@ A fire-and-forget operator that simply emits the current value into the specifie
 
 ```js
 source.pipe(
-  emit(OTHER_TOPIC)
+	emit(OTHER_TOPIC)
 );
 ```
 
