@@ -69,7 +69,7 @@
   },
   "dependencies": {
     "rxjs": "^7.8.1",
-    "vite": "^6.3.5",
+    "vite": "^7.2.2",
     "vite-plugin-dynamic-import": "^1.6.0"
   }
 }
