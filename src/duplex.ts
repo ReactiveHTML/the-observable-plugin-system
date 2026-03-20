@@ -1,11 +1,19 @@
-import { Observable, OperatorFunction, Subject, Subscription,from, map, of, switchMap, tap } from 'rxjs';
+import { Observable, OperatorFunction, ReplaySubject, Subject, Subscription, firstValueFrom, from, map, of, switchMap, tap } from 'rxjs';
 
-export class DuplexStream<T, R=T> extends Subject<T> {
+export class DuplexStream<T, R=T> extends ReplaySubject<T> {
 	origin: Subject<R>;
 
 	constructor(source?: Subject<R>) {
-		super();
-		this.origin = source ?? new Subject<R>();
+		super(1);
+		this.origin = source ?? new ReplaySubject<R>(1);
+	}
+
+	/** Treat as a Promise and resolve on first emission.
+	 * Can be used with async/await
+	 * @returns Promise
+	 */
+	then<R>(nextFn: (data: T) => R): Promise<R> {
+		return firstValueFrom(this).then(nextFn);
 	}
 
 	/**
@@ -15,12 +23,16 @@ export class DuplexStream<T, R=T> extends Subject<T> {
 	 */
 	reply(handler: (data: T) => R | Observable<R>): Subscription {
 		const stream = handler ? this.pipe(map(handler)) : this
+
+		// TODO: any remote chance of memory leaks here?
 		const subscription = stream.subscribe(this.origin);
+
+		// TODO: should we return this, instead?
 		return subscription;
 	}
 
 	/**
-	 * Invoke method: Sends a request and returns an Observable for the responses.
+	 * Invoke method: Sends a request and returns an Observable of responses.
 	 * Supports multiple responses per request.
 	 * @param payload The data to send.
 	 * @returns Observable emitting the responses.
