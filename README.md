@@ -115,12 +115,6 @@ source.pipe(
 );
 ```
 
-### chain
-WIP
-
-### parallel
-WIP
-
 ## Unit testing plugins
 WIP
 
