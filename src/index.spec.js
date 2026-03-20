@@ -1,6 +1,6 @@
-import iPlug from './index.ts'
+import tops from './index.ts'
 
-describe('iPlug', () => {
+describe('TOPS', () => {
 	describe('Setup', () => {
 
 		describe('when we pass a plugin', () => {
@@ -8,7 +8,7 @@ describe('iPlug', () => {
 				const modules = {
 					module1: () => ({ 'test:message': data => `hello ${data}` }),
 				}
-				const plugins = await iPlug(modules)
+				const plugins = await tops(modules)
 				expect(plugins.serial('test:message', 'world')).toBe('hello world')
 			})
 
@@ -17,7 +17,7 @@ describe('iPlug', () => {
 					const modules = {
 						module1: () => ({ 'test:message': data => `hello` }),
 					}
-					const plugins = await iPlug(modules)
+					const plugins = await tops(modules)
 					expect(plugins('test:message', '0')).toBe('hello')
 				})
 
@@ -26,7 +26,7 @@ describe('iPlug', () => {
 					const modules = {
 						module1: { 'test:message': () => moduleConfig },
 					}
-					const plugins = await iPlug(modules, moduleConfig)
+					const plugins = await tops(modules, moduleConfig)
 					expect(plugins('test:message', '0')).toBe(moduleConfig)
 				})
 			})
@@ -42,7 +42,7 @@ describe('iPlug', () => {
 					module2: { 'test': data => 2 },
 					module3: { 'test': data => 3 },
 				}
-				const plugins = await iPlug(modules)
+				const plugins = await tops(modules)
 				expect(plugins.serial('test')).toEqual(3)
 			})
 
@@ -54,7 +54,7 @@ describe('iPlug', () => {
 					module1: { 'test:message': data => `${data}${output1}` },
 					module2: { 'test:message': data => `${data}${output2}` },
 				}
-				const plugins = await iPlug(modules)
+				const plugins = await tops(modules)
 				expect(plugins('test:message', initialData)).toBe(`${initialData}${output1}${output2}`)
 			})
 
@@ -63,7 +63,7 @@ describe('iPlug', () => {
 					const modules = {
 					}
 					const initialData = 'initial-data'
-					const plugins = await iPlug(modules)
+					const plugins = await tops(modules)
 
 					expect(plugins.serial('test', initialData)).toEqual(initialData)
 				})
@@ -76,7 +76,7 @@ describe('iPlug', () => {
 						module2: { 'other:topic': config => data => 'other-stuff' },
 					}
 					const initialData = 'initial-data'
-					const plugins = await iPlug(modules)
+					const plugins = await tops(modules)
 
 					expect(plugins.serial('test', initialData)).toEqual(initialData)
 				})
@@ -93,7 +93,7 @@ describe('iPlug', () => {
 						notInterested2: { 'test:message': undefined },
 						notInterested3: { 'test:message': undefined },
 					}
-					const plugins = await iPlug(modules)
+					const plugins = await tops(modules)
 					const result = plugins
 						.serial('test:message', 'initial')
 
@@ -111,7 +111,7 @@ describe('iPlug', () => {
 					module2: { 'test': data => 2 },
 					module3: { 'test': data => 3 },
 				}
-				const plugins = await iPlug(modules)
+				const plugins = await tops(modules)
 				expect(plugins.parallel('test')).toEqual([1, 2, 3])
 			})
 
@@ -120,7 +120,7 @@ describe('iPlug', () => {
 					module1: { 'test:message': data => `${data}-1` },
 					module2: { 'test:message': data => `${data}-2` },
 				}
-				const plugins = await iPlug(modules)
+				const plugins = await tops(modules)
 				expect(plugins.parallel('test:message', '0')).toEqual(['0-1', '0-2'])
 			})
 
@@ -129,7 +129,7 @@ describe('iPlug', () => {
 					const modules = {
 					}
 					const initialData = 'xxx12345'
-					const plugins = await iPlug(modules)
+					const plugins = await tops(modules)
 
 					expect(plugins.parallel('test', initialData)).toEqual([])
 				})
@@ -142,7 +142,7 @@ describe('iPlug', () => {
 						module2: { 'no:matching:message': data => 99999 },
 					}
 					const initialData = 'xxx12345'
-					const plugins = await iPlug(modules)
+					const plugins = await tops(modules)
 
 					expect(plugins.parallel('test', initialData)).toEqual([])
 				})
@@ -157,7 +157,7 @@ describe('iPlug', () => {
 						module2: { 'test:message': undefined },
 						module3: { 'test:message': data => output3},
 					}
-					const plugins = await iPlug(modules)
+					const plugins = await tops(modules)
 
 					expect(plugins.parallel('test:message')).toEqual([output1, output3])
 				})
