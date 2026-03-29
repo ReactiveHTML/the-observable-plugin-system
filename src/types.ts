@@ -19,7 +19,7 @@ export type Messagebus<T extends MessagebusChannelRecord> = {
 };
 
 export type PluginName = string;
-export type PluginBody<I extends MessagebusChannelRecord, O extends MessagebusChannelRecord> = (messagebus: Messagebus<I>, config?: PluginConfig) => Partial<Messagebus<O>> | void;
+export type PluginBody<I extends MessagebusChannelRecord, O extends MessagebusChannelRecord | void = void> = (messagebus: Messagebus<I>, config?: PluginConfig) => Partial<Messagebus<O>> | void;
 export type AbstractPluginModule = Record<string, PluginBody<any, any>>;
 export type PluginModule<T extends AbstractPluginModule> = (plugins: Messagebus<T>, config?: PluginConfig) => Partial<Messagebus<T>> | void;
 // export type PluginModule<T> = (channels: Record<string, Channel<T>>, config?: PluginConfig) => void;
