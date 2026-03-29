@@ -1,3 +1,4 @@
+.npmrc
 node_modules
 docs/_site
 dist
