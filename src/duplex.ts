@@ -1,4 +1,4 @@
-import { Observable, OperatorFunction, ReplaySubject, Subject, Subscription, firstValueFrom, from, map, of, switchMap, tap } from 'rxjs';
+import { Observable, OperatorFunction, ReplaySubject, Subject, Subscription, UnaryFunction, firstValueFrom, of, switchMap } from 'rxjs';
 
 export class DuplexStream<T, R=T> extends ReplaySubject<T> {
 	origin: Subject<R>;
@@ -21,11 +21,9 @@ export class DuplexStream<T, R=T> extends ReplaySubject<T> {
 	 * @param handler Function to handle incoming data and send responses.
 	 * @returns Subscription to manage the reply handler.
 	 */
-	reply(handler: (data: T) => R | Observable<R>): Subscription {
-		const stream = handler ? this.pipe(map(handler)) : this
-
+	reply(): Subscription {
 		// TODO: any remote chance of memory leaks here?
-		const subscription = stream.subscribe(this.origin);
+		const subscription = this.subscribe(this.origin);
 
 		// TODO: should we return this, instead?
 		return subscription;
@@ -45,8 +43,6 @@ export class DuplexStream<T, R=T> extends ReplaySubject<T> {
 	chain(initial: T): DuplexStream<T, R> {
 		const that = this;
 
-		this.id=Math.random();
-
 		const retval = (this.observers as DuplexStream<any, any>[]).reduce((a, b, i) => {
 			const s = new DuplexStream();
 
@@ -60,7 +56,7 @@ export class DuplexStream<T, R=T> extends ReplaySubject<T> {
 			b.destination._next = data => {
 				oldNext(data);
 			}
-			s.origin.subscribe(x=>console.log('s.ORIGIN', i, x));
+			// s.origin.subscribe(x=>console.log('s.ORIGIN', i, x));
 
 			s.next(initial);
 			return nxt;
@@ -76,8 +72,30 @@ export class DuplexStream<T, R=T> extends ReplaySubject<T> {
 	 * @param operations RxJS operators to apply.
 	 * @returns A new Duplex instance with applied operators.
 	 */
-	pipe(...operations: OperatorFunction<any, any>[]): DuplexStream<T, R> {
-		const p = super.pipe(...operations) as DuplexStream<T, R>;
+	pipe(): DuplexStream<T, R>;
+	pipe<A>(op1: OperatorFunction<T, A>): DuplexStream<A, R>;
+	pipe<A, B>(op1: OperatorFunction<T, A>, op2: OperatorFunction<A, B>): DuplexStream<B, R>;
+	pipe<A, B, C>(op1: OperatorFunction<T, A>, op2: OperatorFunction<A, B>, op3: OperatorFunction<B, C>): DuplexStream<C, R>;
+	pipe<A, B, C, D>(op1: OperatorFunction<T, A>, op2: OperatorFunction<A, B>, op3: OperatorFunction<B, C>, op4: OperatorFunction<C, D>): DuplexStream<D, R>;
+	pipe<A, B, C, D, E>(op1: OperatorFunction<T, A>, op2: OperatorFunction<A, B>, op3: OperatorFunction<B, C>, op4: OperatorFunction<C, D>, op5: OperatorFunction<D, E>): DuplexStream<E, R>;
+	pipe<A, B, C, D, E, F>(op1: OperatorFunction<T, A>, op2: OperatorFunction<A, B>, op3: OperatorFunction<B, C>, op4: OperatorFunction<C, D>, op5: OperatorFunction<D, E>, op6: OperatorFunction<E, F>): DuplexStream<F, R>;
+	pipe<A, B, C, D, E, F, G>(op1: OperatorFunction<T, A>, op2: OperatorFunction<A, B>, op3: OperatorFunction<B, C>, op4: OperatorFunction<C, D>, op5: OperatorFunction<D, E>, op6: OperatorFunction<E, F>, op7: OperatorFunction<F, G>): DuplexStream<G, R>;
+	pipe<A, B, C, D, E, F, G, H>(op1: OperatorFunction<T, A>, op2: OperatorFunction<A, B>, op3: OperatorFunction<B, C>, op4: OperatorFunction<C, D>, op5: OperatorFunction<D, E>, op6: OperatorFunction<E, F>, op7: OperatorFunction<F, G>, op8: OperatorFunction<G, H>): DuplexStream<H, R>;
+	pipe<A, B, C, D, E, F, G, H, I>(op1: OperatorFunction<T, A>, op2: OperatorFunction<A, B>, op3: OperatorFunction<B, C>, op4: OperatorFunction<C, D>, op5: OperatorFunction<D, E>, op6: OperatorFunction<E, F>, op7: OperatorFunction<F, G>, op8: OperatorFunction<G, H>, op9: OperatorFunction<H, I>): DuplexStream<I, R>;
+	pipe(
+		op1?: UnaryFunction<any, any>,
+		op2?: UnaryFunction<any, any>,
+		op3?: UnaryFunction<any, any>,
+		op4?: UnaryFunction<any, any>,
+		op5?: UnaryFunction<any, any>,
+		op6?: UnaryFunction<any, any>,
+		op7?: UnaryFunction<any, any>,
+		op8?: UnaryFunction<any, any>,
+		op9?: UnaryFunction<any, any>,
+	): DuplexStream<any, R> {
+		const operations = [op1, op2, op3, op4, op5, op6, op7, op8, op9].filter((op): op is UnaryFunction<any, any> => Boolean(op));
+		const pipe = ReplaySubject.prototype.pipe as (...ops: UnaryFunction<any, any>[]) => Observable<unknown>;
+		const p = pipe.call(this, ...operations) as DuplexStream<any, R>;
 		p.reply = this.reply
 		p.origin = this.origin
 		p.invoke = this.invoke;
