@@ -1,74 +1,80 @@
 {
-  "name": "the-observable-plugin-system",
-  "version": "0.2.0",
-  "description": "The streaming plugin manager",
-  "module": "src/index.ts",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./src/index.ts",
-      "browser": {
-        "default": "./src/index.ts"
-      }
-    }
-  },
-  "type": "module",
-  "scripts": {
-    "build": "rimraf dist && rollup --bundleConfigAsCjs --config rollup.config.ts --configPlugin typescript",
-    "dev": "rimraf dist && rollup -w --bundleConfigAsCjs --config rollup.config.ts --configPlugin typescript",
-    "test": "jest",
-    "debug-examples": "node --loader ts-node/esm --inspect-brk examples/es6/index.js",
-    "preversion": "npm test",
-    "version": "npm run build && git add -fA dist",
-    "postversion": "git push && git push --tags"
-  },
-  "testMatch": [
-    "**/*.spec.(ts|js)"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:ReactiveHTML/the-observable-plugin-system.git"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "keywords": [
-    "javascript",
-    "typescript",
-    "observable",
-    "rxjs",
-    "plugin manager",
-    "plugin system",
-    "plugin",
-    "plugins",
-    "message bus",
-    "messagebus"
-  ],
-  "author": "Dario M. Mannu",
-  "license": "ISC",
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^25.0.7",
-    "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-terser": "^1.0.0",
-    "@rollup/plugin-typescript": "^11.1.6",
-    "@types/jest": "^29.5.11",
-    "@types/node": "^20.11.5",
-    "esbuild": "^0.19.11",
-    "esbuild-jest": "^0.5.0",
-    "http-server": "^13.0.2",
-    "jest-environment-jsdom": "^30.2.0",
-    "jest-environment-node": "^29.7.0",
-    "rimraf": "^3.0.2",
-    "rollup": "^4.9.5",
-    "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.2",
-    "tslib": "^2.6.2",
-    "typescript": "^5.3.3",
-    "vite": "^6.3.5",
-    "vite-plugin-dynamic-import": "^1.6.0"
-  },
-  "peerDependencies": {
-    "rxjs": "^7.8.1"
+	"name": "the-observable-plugin-system",
+	"version": "0.2.0",
+	"description": "The streaming plugin manager",
+	"module": "src/index.ts",
+	"types": "dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./src/index.ts",
+			"browser": {
+				"default": "./src/index.ts"
+			}
+		}
+	},
+	"files": [
+		"src/"
+	],
+	"type": "module",
+	"scripts": {
+		"build": "rimraf dist && rollup --bundleConfigAsCjs --config rollup.config.ts --configPlugin typescript",
+		"dev": "rimraf dist && rollup -w --bundleConfigAsCjs --config rollup.config.ts --configPlugin typescript",
+		"test": "jest",
+		"debug-examples": "node --loader ts-node/esm --inspect-brk examples/es6/index.js",
+		"preversion": "npm test",
+		"version": "npm run build && git add -fA dist",
+		"postversion": "git push && git push --tags"
+	},
+	"testMatch": [
+		"**/*.spec.(ts|js)"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:ReactiveHTML/the-observable-plugin-system.git"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"javascript",
+		"typescript",
+		"observable",
+		"rxjs",
+		"plugin manager",
+		"plugin system",
+		"plugin",
+		"plugins",
+		"message bus",
+		"messagebus"
+	],
+	"author": "Dario M. Mannu",
+	"license": "ISC",
+	"devDependencies": {
+		"@rollup/plugin-commonjs": "^25.0.7",
+		"@rollup/plugin-json": "^6.1.0",
+		"@rollup/plugin-node-resolve": "^15.2.3",
+		"@rollup/plugin-terser": "^1.0.0",
+		"@rollup/plugin-typescript": "^11.1.6",
+		"@types/jest": "^29.5.11",
+		"@types/node": "^20.11.5",
+		"esbuild": "^0.19.11",
+		"esbuild-jest": "^0.5.0",
+		"http-server": "^13.0.2",
+		"jest-environment-jsdom": "^30.2.0",
+		"jest-environment-node": "^29.7.0",
+		"rimraf": "^3.0.2",
+		"rollup": "^4.9.5",
+		"ts-jest": "^29.1.2",
+		"ts-node": "^10.9.2",
+		"tslib": "^2.6.2",
+		"typescript": "^5.3.3",
+		"vite": "^6.3.5",
+		"vite-plugin-dynamic-import": "^1.6.0"
+	},
+	"peerDependencies": {
+		"rxjs": "^7.8.1"
+	},
+	"dependencies": {
+		"rimmel": "^1.5.2"
 	}
 }
