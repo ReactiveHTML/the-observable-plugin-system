@@ -4,6 +4,6 @@
     "declaration": true,
     "rootDir": "./src"
   },
-  "files": ["global.d.ts"],
+  "files": [],
   "include": ["src"]
 }
