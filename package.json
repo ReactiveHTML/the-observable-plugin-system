@@ -1,6 +1,6 @@
 {
 	"name": "the-observable-plugin-system",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "The streaming plugin manager",
 	"module": "src/index.ts",
 	"types": "src/index.ts",
