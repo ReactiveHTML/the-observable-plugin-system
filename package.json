@@ -3,7 +3,7 @@
 	"version": "0.2.0",
 	"description": "The streaming plugin manager",
 	"module": "src/index.ts",
-	"types": "dist/index.d.ts",
+	"types": "src/index.ts",
 	"exports": {
 		".": {
 			"import": "./src/index.ts",
